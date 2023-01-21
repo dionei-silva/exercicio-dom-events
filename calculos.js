@@ -11,10 +11,9 @@ let descontoFaltas = document.querySelector("#faltas");
 /* let descontosTotais = descontoAutomovel + descontoFaltas; */
 
 /* let total = receitaTotal - descontosTotais; */
+let calculo = JSON.parse(localStorage.getItem("calculo") || "[]");
 
 function inserirDados() {
-    let calculo = JSON.parse(localStorage.getItem("calculo") || "[]");
-
     let receitaTotal =
         parseInt(valorBase.value) +
         parseInt(valorTransporte.value) +
@@ -28,22 +27,24 @@ function inserirDados() {
     let total = receitaTotal - descontoTotal;
     document.querySelector("#valor_total").value = total;
 
-    calculo.push({
-        base: valorBase.value,
-        transporte: valorTransporte.value,
-        alimentacao: valorAlimentacao.value,
-        receita: receitaTotal,
-        automovel: descontoAutomovel.value,
-        faltas: descontoFaltas.value,
-        desconto: descontoTotal,
-        total: total,
-    });
+    calculo = [
+        valorBase.value,
+        valorTransporte.value,
+        valorAlimentacao.value,
+        descontoAutomovel.value,
+        descontoFaltas.value,
+    ];
     localStorage.setItem("calculo", JSON.stringify(calculo));
 }
 
-/* function mostrarReceitasHTML() {
-    let receitaTotal = valorBase.value + valorTransporte + valorAlimentacao;
-
-    let inputHTML = document.querySelector("valor_receita");
-    inputHTML.innerHTML = `"${receitaTotal}"`;
-} */
+function carregarDados() {
+    valorBase.value = calculo[0];
+    valorTransporte.value = calculo[1];
+    valorAlimentacao.value = calculo[2];
+    descontoAutomovel.value = calculo[3];
+    descontoFaltas.value = calculo[4];
+    inserirDados();
+}
+setTimeout(() => {
+    carregarDados();
+}, 1000);
